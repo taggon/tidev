@@ -25,6 +25,9 @@ var TopicList = React.createClass({
   },
 
   selectTopic(topic) {
+    // NavigatorIOS 컴포넌트의 자식 컴포넌트에는 navigator 객체가 프로퍼티로 전달된다.
+    // 주제를 클릭할 때 navigator 객체에 push 메소드를 이용해 새 라우터를 추가해주면
+    // 자동으로 다음 페이지로 이동한다.
     this.props.navigator.push({
       component: TopicView,
       title: '',
@@ -32,6 +35,8 @@ var TopicList = React.createClass({
     });
   },
 
+  // 카테고리 정보를 불러온다.
+  // 이미 불러왔으면 바로 resolve된 Promise 인스턴스를 반환한다.
   loadCategories() {
     if (this.categories) {
       return Promise.resolve(this.categories);
@@ -44,6 +49,12 @@ var TopicList = React.createClass({
     }
   },
 
+  /**
+   * 원격 API로부터 JSON 데이터를 가져오고 Promise 인스턴스를 반환한다.
+   *
+   * 타입체커에서 확인할 수 있도록 page 인수의 타입을 number로 설정했다.
+   * page 뒤에 붙은 ? 표시는 이 값이 생략될 수도 있다는 뜻이다.
+   */
   loadPage(page?: number) {
     var url = (page === undefined) ? this.moreURL : API_LATEST.replace('{page}', page);
 

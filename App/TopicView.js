@@ -43,6 +43,11 @@ var TopicView = createClass({
     return contentTemplate.replace('{content}', html);
   },
 
+  /**
+   * componentDidMount()와 마찬가지로 이 메소드 역시 컴포넌트 인스턴스당 한 번만 발생하기 때문에
+   * 1번만 실행하면 되는 동작을 위해 사용한다. fetch() 통신에 걸릴 시간을 감안해
+   * componentDidMount()가 아닌componentWillMount()를 사용해 조금 더 빨리 불러오도록 했다.
+   */
   componentWillMount() {
     fetch(HOST + API_TOPIC.replace('{id}', this.state.id), {headers:{accept:'application/json'}})
       .then(res => res.json())
@@ -55,6 +60,12 @@ var TopicView = createClass({
       .done();
   },
 
+  /**
+   * Native와 달리 컨텐츠의 높이에 접근할 수 있는 방법이 아직 없기때문에
+   * 자바스크립트로 location.hash 값을 변경시켜 onNavigationStateChange 이벤트를 발생시키고
+   * 그 때의 document.title을 JSON 형식으로 해석하여 메시지를 주고받는다.
+   * 이 방식을 사용해 자동으로 높이 조절을 하거나, 외부 링크를 사파리로 여는 동작을 구현할 수 있다.
+   */
   handleNavigationStateChange(navState, ref) {
     if (!navState.title || navState.title.indexOf('!') !== 0) return;
 
@@ -75,6 +86,7 @@ var TopicView = createClass({
   render() {
     var posts = this.state.posts, content;
 
+    // 게시물을 아직 불러오지 못한 상태면 액티비티 인디케이터를 화면에 표시한다.
     if (!posts || posts.length === 0) {
       posts = [];
       content = <ActivityIndicatorIOS style={styles.loading} size="large" />;
