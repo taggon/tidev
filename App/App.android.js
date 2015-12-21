@@ -1,29 +1,13 @@
 'use strict';
 
 var React = require('react-native');
-var { Navigator, StyleSheet,
-    Text, Homepage
- } = React;
+var { Navigator, StyleSheet } = React;
 
 var TopicList = require('./TopicList.android');
 var TopicView = require('./TopicView.android');
 
 var App = React.createClass({
- //    getNavigator(){
- //   return this.refs.navigator
- // },
-
-  render :function () {
-    //   return (
-    //     <Navigator
-    //     ref="navigator"
-    //       style={styles.container}
-    //       initialRoute={{
-    //         title: 'Tidev',
-            // component: TopicList,
-    //       }}
-    //     />
-    //   );
+  render:  function () {
       return (
         <Navigator
         title='TiveDev'
@@ -36,24 +20,9 @@ var App = React.createClass({
               renderScene={(route, navigator) => this._router(route, navigator)}
         />
       );
-    //   onForward={()=> {
-    //       navigator.push({
-    //           name: 'Scene ' + nextIndex,
-    //           index: nextIndex,
-    //       });
-    //   }}
-    //   onBack={() => {
-    //       if (route.index > 0) {
-    //           navigator.pop();
-    //       }
-    //   }}
-    // return (
-    //     <Text>Test</Text>
-    // );
+  },
 
-},
-
-    _router: function(route, navigator) {
+  _router: function (route, navigator) {
         var routeId = route ? route.id : 'List';
 
         switch (routeId) {

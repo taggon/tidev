@@ -3,13 +3,10 @@
 'use strict';
 
 var React = require('react-native');
-var { createClass, StyleSheet, ScrollView,
-    // WebView,
-    View, Text, Image, ActivityIndicator,
-    // Linking
-} = React;
+var { createClass, StyleSheet, ScrollView, View, Text, Image, ProgressBarAndroid } = React;
 
 var WebViewAndroid = require('react-native-webview-android');
+var WebIntent = require('react-native-webintent');
 
 var { HOST, API_TOPIC } = require('../config.js');
 var TopicMixin = require('./TopicMixin');
@@ -84,128 +81,60 @@ var TopicView = createClass({
         break;
       case 'link':
         if (/^https?:/i.test(msg.data)) {
-        //   Linking.openURL(msg.data);
+            WebIntent.open(msg.data);
         }
         break;
     }
   },
 
   render() {
-    var posts = this.state.posts, content = <Text>Hm...</Text>;
+    var posts = this.state.posts, content;
 
     // 게시물을 아직 불러오지 못한 상태면 액티비티 인디케이터를 화면에 표시한다.
     if (!posts || posts.length === 0) {
       posts = [];
-      content = <ActivityIndicator style={styles.loading} size="large" />;
+      content = <ProgressBarAndroid style={styles.loading} size="large" />;
     }
-
-    // return (
-    //   <ScrollView>
-    //     <View>
-    //       <View style={styles.titleContainer}>
-    //         <Text style={styles.title}>{this.state.title}</Text>
-    //         <View style={styles.metaContainer}>
-    //           <View style={[styles.category, {backgroundColor:'#'+this.state.category.color}]}></View>
-    //           <Text style={styles.meta}>
-    //             {this.state.category.name} · {this.getFormattedDate(this.state.created_at)} · {this.state.views}명 읽음
-    //           </Text>
-    //         </View>
-    //       </View>
-    //       {content}
-    //       {posts.map(post => {
-    //         var ref = 'webview'+post.id;
-    //         return (
-    //           <View key={post.id} style={styles.post}>
-    //             <View style={styles.user}>
-    //               <Image source={{uri:this.getAvatarURL(post.avatar_template, 40)}} style={styles.avatar} />
-    //               <View style={{flex:1}}>
-    //                 <Text style={styles.username}>{post.username} / {post.name}</Text>
-    //                 <Text style={styles.username}>{this.getFormattedDate(post.created_at)}</Text>
-    //               </View>
-    //             </View>
-    //             <WebView
-    //               ref={ref}
-    //               bounces={false}
-    //               scrollEnabled={false}
-    //               automaticallyAdjustContentInsets={false}
-    //               onNavigationStateChange={(state) => this.handleNavigationStateChange(state, ref)}
-    //               style={[styles.webView, this.state[ref+'Height'] && {height:this.state[ref+'Height']}]}
-    //               html={this.overcook(post.cooked)}
-    //             />
-    //           </View>
-    //         );
-    //       })}
-    //     </View>
-    //   </ScrollView>
-    // );
 
     return (
       <ScrollView>
-          <View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{this.state.title}</Text>
-              <View style={styles.metaContainer}>
-                <View style={[styles.category, {backgroundColor:'#'+this.state.category.color}]}></View>
-                <Text style={styles.meta}>
-                  {this.state.category.name} · {this.getFormattedDate(this.state.created_at)} · {this.state.views}명 읽음
-                </Text>
-              </View>
+        <View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{this.state.title}</Text>
+            <View style={styles.metaContainer}>
+              <View style={[styles.category, {backgroundColor:'#'+this.state.category.color}]}></View>
+              <Text style={styles.meta}>
+                {this.state.category.name} · {this.getFormattedDate(this.state.created_at)} · {this.state.views}명 읽음
+              </Text>
             </View>
-
-            {posts.map(post => {
-                var ref = 'webview'+post.id;
-                return (
-                  <View key={post.id} style={styles.post}>
-                    <View style={styles.user}>
-                      <Image source={{uri:this.getAvatarURL(post.avatar_template, 40)}} style={styles.avatar} />
-                      <View style={{flex:1}}>
-                        <Text style={styles.username}>{post.username} / {post.name}</Text>
-                        <Text style={styles.username}>{this.getFormattedDate(post.created_at)}</Text>
-                      </View>
-                    </View>
-                    <WebViewAndroid
-                      ref={ref}
-                      bounces={false}
-                      scrollEnabled={false}
-                      automaticallyAdjustContentInsets={false}
-                      onNavigationStateChange={(state) => this.handleNavigationStateChange(state, ref)}
-                        style={[styles.webView, this.state[ref+'Height'] && {height:this.state[ref+'Height']}]}
-                      html={this.overcook(post.cooked)}
-                    />
-                  </View>
-                );
-            })}
-
           </View>
-        </ScrollView>
+          {content}
+          {posts.map(post => {
+            var ref = 'webview'+post.id;
+            return (
+              <View key={post.id} style={styles.post}>
+                <View style={styles.user}>
+                  <Image source={{uri:this.getAvatarURL(post.avatar_template, 40)}} style={styles.avatar} />
+                  <View style={{flex:1}}>
+                    <Text style={styles.username}>{post.username} / {post.name}</Text>
+                    <Text style={styles.username}>{this.getFormattedDate(post.created_at)}</Text>
+                  </View>
+                </View>
+                <WebViewAndroid
+                  ref={ref}
+                  bounces={false}
+                  scrollEnabled={false}
+                  automaticallyAdjustContentInsets={false}
+                  onNavigationStateChange={(state) => this.handleNavigationStateChange(state, ref)}
+                  style={[styles.webView, this.state[ref+'Height'] && {height:this.state[ref+'Height']}]}
+                  html={this.overcook(post.cooked)}
+                />
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
     );
-
-    // {content}
-    // {posts.map(post => {
-    //   var ref = 'webview'+post.id;
-    //   return (
-    //     <View key={post.id} style={styles.post}>
-    //       <View style={styles.user}>
-    //         <Image source={{uri:this.getAvatarURL(post.avatar_template, 40)}} style={styles.avatar} />
-    //         <View style={{flex:1}}>
-    //           <Text style={styles.username}>{post.username} / {post.name}</Text>
-    //           <Text style={styles.username}>{this.getFormattedDate(post.created_at)}</Text>
-    //         </View>
-    //       </View>
-    //       <WebView
-    //         ref={ref}
-    //         bounces={false}
-    //         scrollEnabled={false}
-    //         automaticallyAdjustContentInsets={false}
-    //         onNavigationStateChange={(state) => this.handleNavigationStateChange(state, ref)}
-    //         style={[styles.webView, this.state[ref+'Height'] && {height:this.state[ref+'Height']}]}
-    //         html={this.overcook(post.cooked)}
-    //       />
-    //     </View>
-    //   );
-    // })}
-
-
   }
 });
 

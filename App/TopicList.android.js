@@ -3,7 +3,7 @@
 'use strict';
 
 var React = require('react-native');
-var { StyleSheet, ListView, View, Text, ActivityIndicator } = React;
+var { StyleSheet, ListView, View, Text, ProgressBarAndroid } = React;
 var TopicListItem = require('./TopicListItem'), TopicView = require('./TopicView.android');
 var { HOST, API_LATEST, API_SITE } = require('../config.js');
 var _ = require('underscore');
@@ -106,7 +106,7 @@ var TopicList = React.createClass({
 
     return (
       <View style={styles.loadingIndicator}>
-        <ActivityIndicator size="small" />
+        <ProgressBarAndroid size="small" />
       </View>
     );
   },
@@ -116,35 +116,25 @@ var TopicList = React.createClass({
 
     return (
       <View style={styles.loadingIndicator}>
-        <ActivityIndicator size="small" />
+        <ProgressBarAndroid size="small" />
       </View>
     );
   },
 
-  // render() {
-  //   return (
-  //     <ListView
-  //       ref="listView"
-  //       style={styles.listView}
-  //       scrollEventThrottle={10}
-  //       removeClippedSubviews={true}
-  //       dataSource={this.state.dataSource}
-  //       renderRow={this.renderTopic}
-  //       renderHeader={this.renderHeader}
-  //       renderFooter={this.renderFooter}
-  //       onScroll={this.handleScroll}
-  //       onEndReached={this.handleEndReached}
-  //     />
-  //   );
-  // },
-
   render() {
     return (
-            <ListView
-              ref="listView"
-              dataSource={this.state.dataSource}
-              renderRow={this.renderTopic}
-            />
+      <ListView
+        ref="listView"
+        style={styles.listView}
+        scrollEventThrottle={10}
+        removeClippedSubviews={true}
+        dataSource={this.state.dataSource}
+        renderRow={this.renderTopic}
+        renderHeader={this.renderHeader}
+        renderFooter={this.renderFooter}
+        onScroll={this.handleScroll}
+        onEndReached={this.handleEndReached}
+      />
     );
   },
 
