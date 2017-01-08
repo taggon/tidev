@@ -22,8 +22,11 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
-# bundle
-iOS/main.jsbundle
+# Android/IJ
+#
+.idea
+.gradle
+local.properties
 
 # node.js
 #

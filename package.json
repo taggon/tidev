@@ -6,8 +6,10 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
-    "react-native": "^0.4.0",
-    "react-native-icons": "0.0.5",
+    "react-native": "^0.17.0-rc",
+    "react-native-icons": "0.7.0",
+    "react-native-webintent": "^1.0.4",
+    "react-native-webview-android": "github:castlesix/react-native-webview-android",
     "underscore": "^1.8.3"
   }
 }

@@ -1,0 +1,11 @@
+rootProject.name = 'Tidev'
+
+include ':app'
+
+// WebViewAndoird
+include ':RNWebView', ':app'
+project(':RNWebView').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview-android')
+
+// Web Intent like LinkingIOS
+include ':RNWebIntent', ':app'
+project(':RNWebIntent').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webintent')

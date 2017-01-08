@@ -14,6 +14,11 @@ Example reader app for my presentation at Tidev meetup
   npm start
   ```
 
-1. Build and run the app in Xcode.
+1. For iOS, Build and run the app in Xcode.
+
+1. For Android, Build with gradle and run on device/emulator.
+  ```
+  react-native run-android
+  ```
 
 1. That's it.
